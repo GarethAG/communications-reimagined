@@ -800,7 +800,9 @@ if (value) {
 
 if (meta) {
   meta.textContent = "out of 4";
-  if(!REDUCED_MOTION) document.querySelector('.orbit-core')?.animate?.([{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'});
+  if (!REDUCED_MOTION) {
+    // animation
+  }
 }
 function goToQuestion(index){ state.screen='question'; state.questionIndex=Math.max(0,Math.min(DATA.questions.length-1,index)); saveState(); render(); finishNavigation(); }
 function restart(){ if(!confirm('Start again and clear the saved answers?'))return; state=cloneDefault(); try{localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(OLD_STORAGE_KEY);}catch(e){} history.replaceState(null,'',location.href.split('#')[0]); render(); finishNavigation(); }

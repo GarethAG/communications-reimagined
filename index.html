@@ -777,7 +777,7 @@ function setChartFocus(index=null){
   rings.forEach((ring,i)=>{ring.classList.toggle('active',index===i);ring.classList.toggle('muted',index!==null&&index!==i);});
   const data=index===null?null:resultData().scores[index];
   const label=document.querySelector('[data-orbit-label]'); const value=document.querySelector('[data-orbit-value]'); const meta=document.querySelector('[data-orbit-meta]');
-  if(label)label.textContent=data?data.short:'Overall score';
+  if(label)label.textContent=data?data.short:'Overall';
   if(value)value.textContent=data?data.average.toFixed(1):resultData().overall.toFixed(1);
   if(meta)meta.textContent='out of 4';
   if(!REDUCED_MOTION) document.querySelector('.orbit-core')?.animate?.([{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'});

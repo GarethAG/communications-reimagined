@@ -31,6 +31,7 @@
   --ease-out:cubic-bezier(.2,.75,.25,1);
   --ease-spring:cubic-bezier(.16,1,.3,1);
 }
+
 * { box-sizing:border-box; }
 html { min-height:100%; background:var(--white); color:var(--ink); scroll-behavior:auto; scrollbar-gutter:stable; }
 body { margin:0; min-height:100vh; font-family:Arial,Helvetica,sans-serif; background:var(--white); color:var(--ink); -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
@@ -453,6 +454,14 @@ const COLORS = ["#0075BC","#4AA57F","#E27F3A","#F0B323","#58A8D8","#C6AA76"];
 const TEXT_COLORS = ["#00639F","#2E765C","#A6511F","#7A5900","#2F739D","#725B31"];
 const DARK_COLORS = ["#7ECEFF","#79C9A6","#F0A06A","#F6CA62","#86C6EC","#D8C49E"];
 const REDUCED_MOTION = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+const ORBIT_LABELS = {
+  made: "Making",
+  audience: "Audience",
+  voice: "Voice",
+  shape: "Function",
+  human: "Human",
+  guardrails: "Guardrails"
+};  
 const defaultState = { screen:"welcome", ambition:null, questionIndex:0, answers:Array(DATA.questions.length).fill(null), meta:{completedBy:"",role:"",organisation:""} };
 let state = loadState();
 let toastTimer = null;
@@ -777,9 +786,20 @@ function setChartFocus(index=null){
   rings.forEach((ring,i)=>{ring.classList.toggle('active',index===i);ring.classList.toggle('muted',index!==null&&index!==i);});
   const data=index===null?null:resultData().scores[index];
   const label=document.querySelector('[data-orbit-label]'); const value=document.querySelector('[data-orbit-value]'); const meta=document.querySelector('[data-orbit-meta]');
-  if(label)label.textContent=data?data.short:'Overall score';
-  if(value)value.textContent=data?data.average.toFixed(1):resultData().overall.toFixed(1);
-  if(meta)meta.textContent='out of 4';
+  if (label) {
+  label.textContent = data
+    ? (ORBIT_LABELS[data.key] ?? data.short)
+    : "Overall";
+}
+
+if (value) {
+  value.textContent = data
+    ? data.average.toFixed(1)
+    : resultData().overall.toFixed(1);
+}
+
+if (meta) {
+  meta.textContent = "out of 4";
   if(!REDUCED_MOTION) document.querySelector('.orbit-core')?.animate?.([{transform:'scale(.97)'},{transform:'scale(1)'}],{duration:220,easing:'cubic-bezier(.16,1,.3,1)'});
 }
 function goToQuestion(index){ state.screen='question'; state.questionIndex=Math.max(0,Math.min(DATA.questions.length-1,index)); saveState(); render(); finishNavigation(); }
